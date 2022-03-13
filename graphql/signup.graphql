@@ -1,0 +1,12 @@
+mutation Signup($signupInput: SignupInput!){
+    signup(signupInput: $signupInput){
+        access_token
+        refresh_token
+        profile{
+            _id
+            firstName
+            lastName
+            email
+        }
+    }
+}
