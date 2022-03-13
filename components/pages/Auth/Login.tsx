@@ -3,6 +3,7 @@ import { LoginInput, LoginMutation, useLoginMutation } from '../../../generated/
 import Input from '../../formInputs/Input';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 const Login = ({ logoNode }: { logoNode: React.ReactNode }) => {
   const methods = useForm<LoginInput>();
@@ -39,9 +40,18 @@ const Login = ({ logoNode }: { logoNode: React.ReactNode }) => {
 
           <Input loading={loading} label="Email" type="text" name="email" />
           <Input loading={loading} label="Password" type="password" name="password" />
-          <button disabled={loading} className={`button-submit`} type="submit">
-            Log In
-          </button>
+          <div className="flex flex-col items-center justify-center space-y-5">
+            <button disabled={loading} className={`button-submit`} type="submit">
+              Log In
+            </button>
+            <Link href="/auth/forgot-password">
+              <a className="hover:text-custom-taurus-forest-fern mx-auto transition-all w-max">
+                Forgot your password?
+              </a>
+            </Link>
+          </div>
+          {/* <div className="w-min"> */}
+          {/* </div> */}
         </form>
       </div>
     </FormProvider>
