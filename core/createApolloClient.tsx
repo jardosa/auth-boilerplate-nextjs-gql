@@ -11,6 +11,7 @@ import { setContext } from '@apollo/client/link/context';
 import { createUploadLink } from 'apollo-upload-client';
 import { useMemo } from 'react';
 import { NextPageContext } from 'next';
+import Cookies from 'js-cookie';
 
 let apolloClient: ApolloClient<NormalizedCacheObject>;
 
@@ -34,17 +35,16 @@ const createApolloClient = (ctx?: NextPageContext) => {
       operation.setContext({ headers: {} });
       return forward(operation);
     }
-    return;
   });
 
   const authLink = setContext(() => {
-    let authToken: string | null = '';
+    let access_token: string | undefined = '';
     if (typeof window) {
-      authToken = localStorage.getItem('authToken');
+      access_token = Cookies.get('access_token');
     }
 
-    if (authToken) {
-      return { headers: { authorization: authToken } };
+    if (access_token) {
+      return { headers: { authorization: `Bearer ${access_token}` } };
     }
     return { headers: {} };
   });

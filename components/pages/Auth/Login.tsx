@@ -1,17 +1,27 @@
-import React from 'react';
 import { FormProvider, SubmitHandler, useForm } from 'react-hook-form';
-import { LoginInput, useLoginMutation } from '../../../generated/graphql';
+import { LoginInput, LoginMutation, useLoginMutation } from '../../../generated/graphql';
 import Input from '../../formInputs/Input';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 const Login = ({ logoNode }: { logoNode: React.ReactNode }) => {
   const methods = useForm<LoginInput>();
-  const [loginMutation, { loading, data, error }] = useLoginMutation();
+  const [loginMutation, { loading }] = useLoginMutation();
+  const router = useRouter();
+
+  const handleLoginComplete = (data: LoginMutation) => {
+    const { access_token, refresh_token } = data.login;
+    Cookies.set('access_token', access_token);
+    Cookies.set('refresh_token', refresh_token);
+    router.push('/');
+  };
 
   const onSubmit: SubmitHandler<LoginInput> = (data) =>
     loginMutation({
       variables: {
         loginInput: data
-      }
+      },
+      onCompleted: handleLoginComplete
     });
 
   return (
